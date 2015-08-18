@@ -1,0 +1,251 @@
+/*
+Grids = rows and cols
+rows contain cols and keep grid inplace
+cols keep content laid and aligned to grid
+
+grid- determined by width margin padding floats defined in grid css  .. worked out in stylesheet.
+
+components of grid:
+1. max number of cols .. 12 cols
+2. fixed pixel values .. each col is 65 px wide;.. cols can span width of several cols as long as they dont exceed max number of cols allowed in a row.
+3. cols have margins or gutters that separate from adjacent cols..
+4. so lets give all but first col in our row.. a 20px left gutter.
+
+
+we want 12 cols at 65 px each.. and need 11 20px gutter margins..
+so total of 1000px ..
+
+convert these to percentages to make grid completely fluid,.
+
+lets determine the width of 1 col in percentages..
+so.. target/context = result formula  .. comonly used in respnsive web desgin.
+target = 65px
+context  = 1000px
+result = 6.5%
+
+so we create a class for 1 grid col..
+.grid-1 {
+	width: 6.5%;
+}
+
+so percentage for 2 cols..
+65 + 65 = 130
+add 20 for the gutter.
+total = 150
+target = 150
+ /
+ context = 1000
+result= 15%
+
+so we create a class for 2 grid col..
+.grid-2 {
+	width: 15%
+}
+
+
+
+so for 3
+150 + 65px 3rd col + 20 gutter = 235
+235/1000 = 23.5%
+so we create a class for 2 grid col..
+.grid-3 {
+	width: 23.5%
+}
+
+
+
+so ... max width spans across all 12 cols..
+anytime we want a grid col to span width of certain number of cols, we can give them any of these grid classes and it will take care of the col layout for us. as long as total number of cols add up to a max of 12 cols.
+
+
+CREATE THE GRID CONTAINER:
+-give it padding and margin properties.. in global..
+
+
+Now create global styles to layout columnes inside our grid continer..
+float them , gutters and padding.
+-select grid container class and select any child container whose class begins with 'grid-'
+-float the colunns left.. and bc we use float - use the min-height prop to keep cols from horizontally collapsing when we give value of at least 1 px.
+-our margin-left or gutters are 20px / 1000px so 2%
+
+
+.grid-container > [class^="grid-"]:first-child {
+	--here we dont want first col to have left margin so we set this selector to 0
+
+	.grid-container > [class^="grid-"]:last-child {
+	--here we want last col in a row to float right so its always flushed right.
+
+	bc we are floating our cols.. we want clearfix to clear our floats so that the grid-container will not collapse..
+	so we use: the grid-container:after...
+
+	.grid-container:after,
+	.group:after {
+	  content: " ";
+	  display: table;
+	  clear: both;
+	}
+
+
+LETS TEST OUR GRID CONTAINER:
+-add grid container inside the header to wrap the logo and nav
+-now we can have main logo span width of 2 cols and nav to span width of 8 cols
+-just add grid-2 and grid-8 to each class
+-now give main-nav a text align of right so it is flush agains right margin of page.
+
+--now give primary and secondary containers the grid container to wrap both..
+-now give primary grid-8 and secondsary grid-4  for total of 12..
+
+
+
+
+NOW WUT IF WE NEED TO ADD NEW ROW OF CONTENT:
+-simply add the div with divs inside..
+-give parent div the class grid container..
+-give first col div grid-4 class  and the same for next 2.. and u have a row of 3 equal sized columns..
+
+
+NOW LETS PREVENT OUR VIEWPORT FROM BECOMING TOO WIDE BY SETTING DEFAULTS WHEN IT HITS A CERTAIN PX WIDTH..
+-create a new media query so when browser at 1200px or higher, grid containers width is 1100px max
+
+@media (min-width: 1200px) {
+	.grid-container {
+		max-width: 1100px;
+	}
+}
+
+-so our layout remains fixed at 1200px width..
+-now whats nice is header spans entire width of container bc we nested our grid container inside the header elemnt.
+
+
+NOW LETS CREATE VISIBLITY CLASS THAT HIDES ELEMENTS..
+-when viewport is bt 1px and 767.. we hide elements in mobile view..
+
+@media (min-width: 1px) and (max-width: 767px)  {
+	.grid-container > [class^="grid-"] {
+		padding-top: 5px;
+		padding-bottom: 5px;
+	}
+	.hide-mobile {
+		display: none;
+	}
+}
+
+-so hide banner and hide the 2nd row of content
+
+
+
+
+*/
+
+
+/* Global
+================================ */
+
+.grid-container {
+	padding-left: 10px;
+	padding-right: 10px;
+	margin-left: auto;
+	margin-right: auto;
+}
+img {
+	width: 100%;
+}
+
+/* Media Queries
+================================ */
+
+@media (min-width: 1px) and (max-width: 767px)  {
+	.grid-container > [class^="grid-"] {
+		padding-top: 5px;
+		padding-bottom: 5px;
+	}
+	.hide-mobile {
+		display: none;
+	}
+}
+
+@media (min-width: 768px) {
+
+	/* Columns
+	================================ */
+
+	.grid-container > [class^="grid-"] {
+		float: left;
+		min-height: 1px;
+		padding-left: 10px;
+		padding-right: 10px;
+		margin-left: 2%;
+	}
+	.grid-container > [class^="grid-"]:first-child {
+		margin-left: 0;
+	}
+	.grid-container > [class^="grid-"]:last-child {
+		float: right;
+	}
+
+	/* Columns are 65px wide, with 20px gutters
+	=========================================== */
+
+	.grid-1 {
+		width: 6.5%;
+	}
+	.grid-2 {
+		width: 15%;
+	}
+	.grid-3 {
+		width: 23.5%;
+	}
+	.grid-4 {
+		width: 32%;
+	}
+	.grid-5 {
+		width: 40.5%;
+	}
+	.grid-6 {
+		width: 49%;
+	}
+	.grid-7 {
+		width: 57.5%;
+	}
+	.grid-8 {
+		width: 66%;
+	}
+	.grid-9 {
+		width: 74.5%;
+	}
+	.grid-10 {
+		width: 83%;
+	}
+	.grid-11 {
+		width: 91.5%;
+	}
+	.grid-12 {
+		width: 100%;
+	}
+
+	/* Clearfix
+	================================ */
+
+	.grid-container:after,
+	.group:after {
+	  content: " ";
+	  display: table;
+	  clear: both;
+	}
+}
+@media (min-width: 1200px) {
+	.grid-container {
+		max-width: 1100px;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
